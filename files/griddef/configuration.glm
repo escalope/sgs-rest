@@ -1,0 +1,114 @@
+//CONFIGURATION
+
+// Transformers configuration
+object transformer_configuration {
+     name trans_config_substation;
+     connect_type WYE_WYE;
+     install_type VAULT;
+     primary_voltage 45 kV;
+     secondary_voltage 15 kV;
+     power_rating 1000 kVA;
+     impedance 0.011+0.0632j;
+}
+
+object transformer_configuration {
+     name config_transformer_ct1;
+     connect_type WYE_WYE;
+     install_type VAULT;
+     primary_voltage 15 kV;
+     secondary_voltage 0.4 kV;
+     power_rating 250 kVA;
+     impedance 0.0142+0.0501j;
+}
+
+object transformer_configuration {
+     name config_transformer_ct2;
+     connect_type WYE_WYE;
+     install_type VAULT;
+     primary_voltage 15 kV;
+     secondary_voltage 0.4 kV;
+     power_rating 630 kVA;
+     impedance 0.0142+0.0501j;
+}
+
+object transformer_configuration {
+     name config_transformer_ct1_2;
+     connect_type WYE_WYE;
+     install_type VAULT;
+     primary_voltage 15 kV;
+     secondary_voltage 0.4 kV;
+     power_rating 2 kVA;
+     impedance 0.0142+0.0501j;
+}
+
+
+
+// Lines configuration
+
+//MV lines
+object underground_line_conductor { 
+    name underground_line_conductor_MV;
+    outer_diameter 0.0132 m; 
+    conductor_gmr 0.0032 m; 
+    conductor_diameter 0.0071 m; 
+    conductor_resistance 0.746 Ohm/km;
+    neutral_gmr 0.0032 m; 
+    neutral_diameter 0.0071 m; 
+    neutral_resistance 0.746 Ohm/km;
+    neutral_strands 20; 
+}
+
+//LV lines
+object underground_line_conductor { 
+    name underground_line_conductor_LV;
+    outer_diameter 0.0132 m; 
+    conductor_gmr 0.0032 m; 
+    conductor_diameter 0.0071 m; 
+    conductor_resistance 0.31 Ohm/km;
+    neutral_gmr 0.0032 m; 
+    neutral_diameter 0.0071 m; 
+    neutral_resistance 0.31 Ohm/km;
+    neutral_strands 20; 
+}
+
+//Lines spacing MV
+object line_spacing {
+	name line_spacing_MV;
+	distance_AB 0.75 m;
+	distance_BC 1.35 m;
+	distance_AC 2.10 m;
+	distance_AN 1.69 m;
+	distance_BN 1.28 m;
+	distance_CN 1.50 m;
+}
+
+//Lines spacing LV
+object line_spacing {
+	name line_spacing_LV;
+	distance_AB 0.75 m;
+	distance_BC 1.35 m;
+	distance_AC 2.10 m;
+	distance_AN 1.69 m;
+	distance_BN 1.28 m;
+	distance_CN 1.50 m;
+}
+
+//Line configuration MV
+object line_configuration {
+	name line_configuration_MV;
+	conductor_A underground_line_conductor_MV;
+	conductor_B underground_line_conductor_MV;
+	conductor_C underground_line_conductor_MV;
+	conductor_N underground_line_conductor_MV;
+	spacing line_spacing_MV;
+}
+
+//Line configuration LV
+object line_configuration {     
+      name line_configuration_LV;     
+      conductor_A underground_line_conductor_LV;
+      conductor_B underground_line_conductor_LV;
+      conductor_C underground_line_conductor_LV;
+      conductor_N underground_line_conductor_LV;     
+      spacing line_spacing_LV;     
+}       

@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/network" xmlns="http://www.example.org/network" elementFormDefault="qualified">
+
+<xs:simpleType name="phasesType">
+  <xs:restriction base="xs:string">
+  	<xs:minLength value="1"/>
+    <xs:maxLength value="4"/>
+    <xs:pattern value="([A])*([B])*([C])*([N])*"/>
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="controlType">
+  <xs:restriction base="xs:integer">
+    <xs:enumeration value="0"/>
+    <xs:enumeration value="1"/>
+    <xs:enumeration value="2"/>
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="loadPossibleTypes">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="CONSUMER"/>
+    <xs:enumeration value="SOLAR_GENERATOR"/>
+    <xs:enumeration value="WIND_GENERATOR"/>
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="batteryPossibleTypes">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="LEAD_ACID"/>
+    <xs:enumeration value="LI_ION"/>
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="dateType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]"/>
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:complexType name="loadType">
+	<xs:all>
+	    <xs:element name="type" type="loadPossibleTypes">
+	    	<xs:annotation>
+			    <xs:documentation>Types of loads available: CONSUMER, SOLAR_GENERATOR, WIND_GENERATOR</xs:documentation>
+			</xs:annotation>
+  		</xs:element>
+	    <xs:element name="control" type="controlType">
+	    	<xs:annotation>
+	  	 		<xs:documentation>Control type for the component: 0 = No control, 1 = ON/OFF control, 2 = Full control </xs:documentation>
+			</xs:annotation>
+		</xs:element>	
+	    <xs:element name="name" type="xs:string">
+	    	<xs:annotation>
+  	 			<xs:documentation>Name of the component.</xs:documentation>
+  			</xs:annotation>
+  		</xs:element>
+	    <xs:element name="phases" type="phasesType">
+	    	<xs:annotation>
+  	 			<xs:documentation>Phases connection. The allowed values are ABCN. It defines one/two/three phase connection with/without neutral phase.</xs:documentation>
+  			</xs:annotation>
+  		</xs:element>
+	    <xs:element name="nominal_voltage" type="xs:decimal">
+	    	<xs:annotation>
+  	 			<xs:documentation>Nominal voltage of the node in Volts (V).</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="max_power" type="xs:decimal">
+	    	<xs:annotation>
+  	 			<xs:documentation>Maximum power of the element in Watts (W).</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="wire_length" type="xs:decimal">
+	    	<xs:annotation>
+  	 			<xs:documentation>Length of the wire in meters (m).</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="configuration" type="xs:string">
+	    	<xs:annotation>
+  	 			<xs:documentation>Name of the GridLAB-D configuration object that defines the features for the line that connects this component.</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="connected_to" type="xs:string">
+	    	<xs:annotation>
+  	 			<xs:documentation>Component which this one is connected to.</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+    </xs:all>
+</xs:complexType>
+
+<xs:complexType name="batteryType">
+	<xs:all>
+	    <xs:element name="name" type="xs:string">
+	    	<xs:annotation>
+  	 			<xs:documentation>Name of the component.</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="control" type="controlType">
+	    	<xs:annotation>
+	  	 		<xs:documentation>Control type for the component: 0 = No control, 1 = ON/OFF control, 2 = Full control </xs:documentation>
+			</xs:annotation>
+		</xs:element>
+	    <xs:element name="V_Max" type="xs:decimal">
+	    	<xs:annotation>
+  	 			<xs:documentation>Maximum voltage in Volts (V).</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="I_Max" type="xs:decimal">
+	    	<xs:annotation>
+  	 			<xs:documentation>Maximum current in Amperes (A).</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="P_Max" type="xs:decimal">
+	    	<xs:annotation>
+  	 			<xs:documentation>Maximum power of charge/discharge in Watts (W).</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="E_Max" type="xs:decimal">
+	    	<xs:annotation>
+  	 			<xs:documentation>Maximum capacity of the battery in Watts hour (Wh).</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="Energy" type="xs:decimal">
+	    	<xs:annotation>
+  	 			<xs:documentation>Current level of energy in Watts hour (Wh).</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="type" type="batteryPossibleTypes">
+	    	<xs:annotation>
+		  	 	<xs:documentation>Types of batteries available: LEAD_ACID, LI_ION</xs:documentation>
+		  	</xs:annotation>
+		</xs:element>
+	    <xs:element name="base_efficiency" type="xs:decimal">
+	    	<xs:annotation>
+		  	 	<xs:documentation>Base efficiency of the battery (per unit)</xs:documentation>
+		  	</xs:annotation>
+	    </xs:element>
+	    <xs:element name="phases" type="phasesType">
+	    	<xs:annotation>
+  	 			<xs:documentation>Phases connection. The allowed values are ABCN. It defines one/two/three phase connection with/without neutral phase.</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="nominal_voltage" type="xs:decimal">
+	    	<xs:annotation>
+  	 			<xs:documentation>Nominal voltage of the node in Volts (V).</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="wire_length" type="xs:decimal">
+	    	<xs:annotation>
+  	 			<xs:documentation>Length of the wire in meters (m).</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="configuration" type="xs:string">
+	    	<xs:annotation>
+  	 			<xs:documentation>Name of the GridLAB-D configuration object that defines the features for the line that connects this component.</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="connected_to" type="xs:string">
+	    	<xs:annotation>
+  	 			<xs:documentation>Component which this one is connected to.</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+    </xs:all>
+</xs:complexType>
+
+<xs:complexType name="componentsType">
+	<xs:choice minOccurs="0" maxOccurs="unbounded">
+	    <xs:element name="load" type="loadType"/>
+	    <xs:element name="battery" type="batteryType"/>
+	</xs:choice>
+</xs:complexType>
+
+<xs:complexType name="transformerType">
+	<xs:sequence>
+		<xs:element name="name" type="xs:string">
+			<xs:annotation>
+  	 			<xs:documentation>Name of the transformer.</xs:documentation>
+  			</xs:annotation>
+		</xs:element>
+	    <xs:element name="configuration" type="xs:string">
+	    	<xs:annotation>
+  	 			<xs:documentation>Name of the GridLAB-D configuration object that defines the features for this transformer.</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="out_nominal_voltage" type="xs:decimal">
+	    	<xs:annotation>
+  	 			<xs:documentation>Secondary voltage of the transformer in Volts (V).</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="components" type="componentsType">
+	    	<xs:annotation>
+  	 			<xs:documentation>Components connected to the transformer.</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="elementsType">
+	<xs:sequence minOccurs="0" maxOccurs="unbounded">
+	    <xs:element name="transformer" type="transformerType"/>
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ctType">
+	<xs:sequence>
+		<xs:element name="name" type="xs:string">
+			<xs:annotation>
+  	 			<xs:documentation>Name of the transformation center.</xs:documentation>
+  			</xs:annotation>
+		</xs:element>
+	    <xs:element name="phases" type="phasesType">
+	    	<xs:annotation>
+  	 			<xs:documentation>Phases connection. The allowed values are ABCN. It defines one/two/three phase connection with/without neutral phase.</xs:documentation>
+  			</xs:annotation>
+         </xs:element>
+	    <xs:element name="in_nominal_voltage" type="xs:decimal">
+	    	<xs:annotation>
+  	 			<xs:documentation>Primary voltage of the transformation center in Volts (V).</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="elements" type="elementsType">
+	    	<xs:annotation>
+  	 			<xs:documentation>Elements of the transformation center (transformers and the components connected to it).</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="connectionType">
+	<xs:sequence>
+        <xs:element name="nodea" type="xs:string">
+          	<xs:annotation>
+  	 			<xs:documentation>Name of the first CT</xs:documentation>
+  			</xs:annotation>
+		</xs:element>
+        <xs:element name="nodeb" type="xs:string">
+          	<xs:annotation>
+  	 			<xs:documentation>Name of the second CT</xs:documentation>
+  			</xs:annotation>
+		</xs:element>
+        <xs:element name="length" type="xs:decimal">
+          	<xs:annotation>
+  	 			<xs:documentation>Length of the wire in meters (m).</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+          <xs:element name="phases" type="phasesType">
+          	<xs:annotation>
+  	 			<xs:documentation>Phases connection. The allowed values are ABCN. It defines one/two/three phase connection with/without neutral phase.</xs:documentation>
+  			</xs:annotation>
+        </xs:element>
+        <xs:element name="configuration" type="xs:string">
+          	<xs:annotation>
+  	 			<xs:documentation>Name of the GridLAB-D configuration object that defines the features for the line that connects the two CTs.</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+    </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="substationType">
+	<xs:sequence>
+		<xs:element name="name" type="xs:string">
+			<xs:annotation>
+  	 			<xs:documentation>Name of the substation node.</xs:documentation>
+  			</xs:annotation>
+		</xs:element>
+	    <xs:element name="phases" type="phasesType">
+	      <xs:annotation>
+		  	 <xs:documentation>Phases connection. The allowed values are ABCN. It defines one/two/three phase connection with/without neutral phase.</xs:documentation>
+		  </xs:annotation>
+		</xs:element>
+	    <xs:element name="in_nominal_voltage" type="xs:decimal">
+	    	<xs:annotation>
+  	 			<xs:documentation>Primary voltage of the transformer in Volts (V).</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="out_nominal_voltage" type="xs:decimal">
+	    	<xs:annotation>
+  	 			<xs:documentation>Secondary voltage of the transformer in Volts (V).</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="trans_configuration" type="xs:string">
+	    	<xs:annotation>
+  	 			<xs:documentation>Name of the GridLAB-D configuration object that defines the features for this transformer.</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	    <xs:element name="line_configuration" type="xs:string">
+	    	<xs:annotation>
+  	 			<xs:documentation>Name of the GridLAB-D configuration object that defines the features for the line that connects the substation with the next element.</xs:documentation>
+  			</xs:annotation>
+	    </xs:element>
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="clockType">
+	<xs:sequence>
+         <xs:element name="starttime" type="dateType">
+	         <xs:annotation>
+		  	 	<xs:documentation>Time to start simulation in format yyyy-MM-dd hh:mm:ss</xs:documentation>
+		  	 </xs:annotation>
+ 		 </xs:element>
+         <xs:element name="stoptime" type="dateType">
+          	<xs:annotation>
+		  	 	<xs:documentation>Time to stop simulation in format yyyy-MM-dd hh:mm:ss</xs:documentation>
+		  	 </xs:annotation>
+         </xs:element>
+    </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="sgsimType">
+  	<xs:sequence>
+      <xs:element name="clock" type="clockType">
+      	<xs:annotation>
+		  <xs:documentation>Clock that defines the start time and the stop time of the simulation</xs:documentation>
+		</xs:annotation>
+      </xs:element>
+      <xs:element name="substation" type="substationType">
+      	<xs:annotation>
+		  <xs:documentation>Incoming substation of the grid</xs:documentation>
+		</xs:annotation>
+      </xs:element>
+      <xs:element name="connection" type="connectionType" minOccurs="0" maxOccurs="unbounded">
+      	<xs:annotation>
+		  <xs:documentation>Connection between two transformation centers (CTs)</xs:documentation>
+		</xs:annotation>
+      </xs:element>
+      <xs:element name="gridnode" type="ctType" minOccurs="0" maxOccurs="unbounded">
+      	<xs:annotation>
+		  <xs:documentation>Transformation center (CT) of the grid</xs:documentation>
+		</xs:annotation>
+      </xs:element>
+  	</xs:sequence>
+</xs:complexType>
+
+<xs:element name="sgsim" type="sgsimType"/>
+
+</xs:schema>

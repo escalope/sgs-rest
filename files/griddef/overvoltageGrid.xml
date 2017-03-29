@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sgsim
+xmlns="http://www.example.org/network"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.example.org/network ../../../../target/resources/xml/networkSchema.xsd ">
+
+	<!--- clock -->
+	<clock>
+		<starttime>2014-04-15 00:00:00</starttime>
+		<stoptime>2014-04-15 06:00:00</stoptime>
+	</clock>
+	
+	<substation>
+		<name>SUBSTATION</name>
+		<phases>ABC</phases>
+		<in_nominal_voltage>45000</in_nominal_voltage>
+		<out_nominal_voltage>15000</out_nominal_voltage>
+		<trans_configuration>trans_config_substation</trans_configuration>
+		<line_configuration>line_configuration_MV</line_configuration>
+	</substation>
+	
+	<!-- CTs connections -->
+	<connection>
+		<nodea>SUBSTATION</nodea>
+		<nodeb>CT-1</nodeb>
+		<length>10</length>
+		<phases>ABC</phases>
+		<configuration>line_configuration_MV</configuration>
+	</connection>
+	<connection>
+		<nodea>CT-1</nodea>
+		<nodeb>CT-2</nodeb>
+		<length>152</length>
+		<phases>ABC</phases>
+		<configuration>line_configuration_MV</configuration>
+	</connection>
+	<connection>
+		<nodea>CT-1</nodea>
+		<nodeb>CT-3</nodeb>
+		<length>1282</length>
+		<phases>ABC</phases>
+		<configuration>line_configuration_MV</configuration>
+	</connection>
+	
+	
+	
+	<!--- CT -->
+	<gridnode>
+		<name>CT-1</name>
+		<phases>ABC</phases>
+		<in_nominal_voltage>15000</in_nominal_voltage>
+		<elements>
+			<transformer>
+				<name>transformerCT1</name>
+				<configuration>config_transformer_ct1</configuration>
+				<out_nominal_voltage>400</out_nominal_voltage>
+				<components>
+					<load>
+						<type>CONSUMER</type>
+						<control>0</control>
+						<name>Building_11</name>
+						<phases>ABCN</phases>
+						<nominal_voltage>400</nominal_voltage>
+						<max_power>5000</max_power>
+						<wire_length>222.5</wire_length>
+						<configuration>line_configuration_LV</configuration>
+						<connected_to>transformerCT1</connected_to>
+					</load>
+					<load>
+						<type>CONSUMER</type>
+						<control>0</control>
+						<name>Building_12</name>
+						<phases>ABCN</phases>
+						<nominal_voltage>400</nominal_voltage>
+						<max_power>6000</max_power>
+						<wire_length>150</wire_length>
+						<configuration>line_configuration_LV</configuration>
+						<connected_to>transformerCT1</connected_to>
+					</load>
+					<load>
+						<type>CONSUMER</type>
+						<control>0</control>
+						<name>Building_13</name>
+						<phases>ABCN</phases>
+						<nominal_voltage>400</nominal_voltage>
+						<max_power>5000</max_power>
+						<wire_length>180.5</wire_length>
+						<configuration>line_configuration_LV</configuration>
+						<connected_to>transformerCT1</connected_to>
+					</load>
+					<load>
+						<type>SOLAR_GENERATOR</type>
+						<control>1</control>
+						<name>Solar_11</name>
+						<phases>ABCN</phases>
+						<nominal_voltage>400</nominal_voltage>
+						<max_power>10000</max_power>
+						<wire_length>49.1</wire_length>
+						<configuration>line_configuration_LV</configuration>
+						<connected_to>Building_13</connected_to>
+					</load>
+				</components>
+			</transformer>
+		</elements>
+	</gridnode>
+	
+	<gridnode>
+		<name>CT-2</name>
+		<phases>ABC</phases>
+		<in_nominal_voltage>15000</in_nominal_voltage>
+		<elements>
+			<transformer>
+				<name>transformerCT2_1</name>
+				<configuration>config_transformer_ct2</configuration>
+				<out_nominal_voltage>400</out_nominal_voltage>
+				<components>
+					<load>
+						<type>WIND_GENERATOR</type>
+						<control>2</control>
+						<name>Wind_21</name>
+						<phases>ABCN</phases>
+						<nominal_voltage>400</nominal_voltage>
+						<max_power>3000</max_power>
+						<wire_length>6</wire_length>
+						<configuration>line_configuration_LV</configuration>
+						<connected_to>transformerCT2_1</connected_to>
+					</load>	
+				</components>
+			</transformer>
+			
+			<transformer>
+				<name>transformerCT2_2</name>
+				<configuration>config_transformer_ct2</configuration>
+				<out_nominal_voltage>400</out_nominal_voltage>
+				<components>
+					<load>
+						<type>CONSUMER</type>
+						<control>0</control>
+						<name>Building_21</name>
+						<phases>ABCN</phases>
+						<nominal_voltage>400</nominal_voltage>
+						<max_power>5000</max_power>
+						<wire_length>180.5</wire_length>
+						<configuration>line_configuration_LV</configuration>
+						<connected_to>transformerCT2_2</connected_to>
+					</load>
+					<load>
+						<type>CONSUMER</type>
+						<control>0</control>
+						<name>Building_22</name>
+						<phases>ABCN</phases>
+						<nominal_voltage>400</nominal_voltage>
+						<max_power>5000</max_power>
+						<wire_length>150</wire_length>
+						<configuration>line_configuration_LV</configuration>
+						<connected_to>transformerCT2_2</connected_to>
+					</load>	
+				</components>
+			</transformer>
+		</elements>
+	</gridnode>
+	
+	<gridnode>
+		<name>CT-3</name>
+		<phases>ABC</phases>
+		<in_nominal_voltage>15000</in_nominal_voltage>
+		<elements>
+			<transformer>
+				<name>transformerCT3</name>
+				<configuration>config_transformer_ct1_2</configuration>
+				<out_nominal_voltage>400</out_nominal_voltage>
+				<components>
+					<load>
+						<type>CONSUMER</type>
+						<control>0</control>
+						<name>Building_31</name>
+						<phases>ABCN</phases>
+						<nominal_voltage>400</nominal_voltage>
+						<max_power>5000</max_power>
+						<wire_length>180.5</wire_length>
+						<configuration>line_configuration_LV</configuration>
+						<connected_to>transformerCT3</connected_to>
+					</load>
+					<load>
+						<type>CONSUMER</type>
+						<control>0</control>
+						<name>Building_32</name>
+						<phases>ABCN</phases>
+						<nominal_voltage>400</nominal_voltage>
+						<max_power>5000</max_power>
+						<wire_length>150</wire_length>
+						<configuration>line_configuration_LV</configuration>
+						<connected_to>transformerCT3</connected_to>
+					</load>
+					<battery>
+						<name>Battery_31</name>
+						<control>2</control>
+						<V_Max>410</V_Max>
+						<I_Max>400</I_Max>
+						<P_Max>30000</P_Max>
+						<E_Max>60000</E_Max>
+						<Energy>0</Energy>
+						<type>LI_ION</type>
+						<base_efficiency>0.95</base_efficiency>
+						<phases>ABCN</phases>
+						<nominal_voltage>400</nominal_voltage>
+						<wire_length>20</wire_length>
+						<configuration>line_configuration_LV</configuration>
+						<connected_to>Building_31</connected_to>
+					</battery>		
+				</components>
+			</transformer>
+		</elements>
+	</gridnode>
+	
+</sgsim>
