@@ -7,7 +7,11 @@ import mired.ucm.simulator.orders.SwitchOff;
 
 public class JsonSwitchOff implements JsonOrder<SwitchOff> {
 
-	private String deviceName;
+	public String deviceName;
+
+	public void setDeviceName(String deviceName) {
+		this.deviceName = deviceName;
+	}
 
 	// serialization
 	public JsonSwitchOff()

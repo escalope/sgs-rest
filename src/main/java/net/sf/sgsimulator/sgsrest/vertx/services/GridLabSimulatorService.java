@@ -1,14 +1,18 @@
 package net.sf.sgsimulator.sgsrest.vertx.services;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
+import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -17,6 +21,10 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Element;
@@ -26,12 +34,15 @@ import org.xml.sax.SAXException;
 import com.github.aesteve.vertx.nubes.services.Service;
 import com.github.aesteve.vertx.nubes.utils.functional.TriConsumer;
 
+import io.netty.handler.codec.http2.Http2HeadersEncoder.SensitivityDetector;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import mired.ucm.dynamicGLM.XMLUtilities;
 import mired.ucm.grid.ElementEMS;
+import mired.ucm.grid.TypesElement;
+import mired.ucm.grid.TypesGenerator;
 import mired.ucm.monitor.Event;
 import mired.ucm.monitor.ReadScenario;
 import mired.ucm.price.Tariff;
@@ -45,6 +56,12 @@ import mired.ucm.simulator.NetworkStatus;
 import mired.ucm.simulator.SensorContainerNotFound;
 import mired.ucm.simulator.SensorIDS;
 import mired.ucm.simulator.SimulatorNotInitializedException;
+import mired.ucm.simulator.NetworkStatus.UnknownSensor;
+import mired.ucm.simulator.displayer.CtsDisplayer;
+import mired.ucm.simulator.displayer.StateWindow;
+import mired.ucm.simulator.orders.Order;
+import mired.ucm.simulator.orders.SwitchOn;
+import mired.ucm.viewer.PowerGridViewer;
 import net.sf.sgsimulator.sgsrest.vertx.domain.orders.JsonOrder;
 
 @SuppressWarnings({ "unused", "rawtypes" })
@@ -66,7 +83,7 @@ public class GridLabSimulatorService implements NetworkListener, Service {
 	private float importedEnergy;
 	private float exportedEnergy;
 	private float energyLosses;
-	private double bill;
+	private float bill;
 	private Tariff tariff;
 	private boolean activeClients;
 	private ReadScenario rs;
@@ -120,6 +137,13 @@ public class GridLabSimulatorService implements NetworkListener, Service {
 					intelligence);
 			this.gldes.start();
 			future.complete();
+			for (ElementEMS generator:this.nes.getGenerators()){
+				if (generator.getType().equals(TypesElement.GENERATOR)){
+					this.gldes.getSimulator()
+					.queueOrder(new SwitchOn(generator.getName(), getTime(), paths));					
+				}
+			}
+			
 		} catch (GridlabException | SimulatorNotInitializedException e)
 		{
 			future.fail(e);
@@ -216,8 +240,188 @@ public class GridLabSimulatorService implements NetworkListener, Service {
 				timestampDate,
 				"generation-sum",
 				nes.calculateGenerationSum() / 1000.0F);
+		
 
+		this.sendEvent(
+				timestampDate,
+				"demand",
+				getLastKWDemand());
+		
+		this.sendEvent(
+				timestampDate,
+				"bill",
+				getCurrentBill());
+		
+		this.sendEvent(
+				timestampDate,
+				"export",
+				getLastKWExport());
+		
+		this.sendEvent(
+				timestampDate,
+				"import",
+				getLastKWImport());
+		
+		this.sendEvent(
+				timestampDate,
+				"consumption",
+				getLastKWConsumption());
+		
+		this.sendEvent(
+				timestampDate,
+				"generation",
+				getLastKWGeneration());
+		
+		this.sendEvent(
+				timestampDate,
+				"powerdump",
+				getLastKWConsumption()-getLastKWGeneration());
+		
+		
+		/**
+		 * Compute bill, generated energy, and 
+		 */
+				
+		computeAdditionalCycleStatus(ns,nes,timestampDate);
 	}
+	
+
+
+	protected int NUMBER_OF_SERIES=4;
+	protected int CONSUMPTION_SERIES_INDEX = 0;
+	protected int GENERATION_SERIES_INDEX = 1;
+	protected int DEMAND_SERIES_INDEX = 2;
+	protected int LOSSES_SERIES_INDEX = 3;
+	protected final int timeUnit = Calendar.MILLISECOND;
+	
+
+
+	private long realTimeCycleLengthMillis;
+	private Object lastTimeStamp;
+	private double lastExport;
+	private double lastConsumption;
+	
+	
+	public float getCurrentBill(){
+		return bill;
+	}
+	
+	public float getTotalImportedEnergykWh(){
+		return importedEnergy;
+	}
+	
+	public float getTotalExportedEnergykWh(){
+		return exportedEnergy;
+	}
+	
+	public double getLastKWImport(){
+		return lastImport;
+	}
+	
+	public double getLastKWDemand(){
+		return lastDemand;
+	}
+	
+	
+	public double getLastKWGeneration(){
+		return lastGeneration;
+	}
+	public double getLastKWExport(){
+		return lastExport;
+	}
+	public double getLastKWConsumption(){
+		return lastConsumption;
+	}
+	
+	
+	
+	private double lastImport=0;// energy demand from the microgrid
+	private double lastGeneration=0;// energy generation from the microgrid
+	private double lastDemand=0;// energy generation from the microgrid
+	public void computeAdditionalCycleStatus(NetworkStatus ns, NetworkElementsStatus nes, Date timestamp) {
+		Date init=new Date(); // to measure cycle length
+		
+		if (ns.thereIsOvervoltage())
+			System.err.println(ns.getOvervoltageTimestamp());
+		
+		// UPDATING SIMULATION CHART
+		float[] newSimulationData = new float[NUMBER_OF_SERIES];
+		newSimulationData[CONSUMPTION_SERIES_INDEX] = (float)rs.getConsumption(nes.getAvailableElements(),timestamp); // Getting consumption of energy of the next simtime
+		newSimulationData[GENERATION_SERIES_INDEX] = (float) nes.calculateGenerationSum()/1000; // Getting the sum of the generation of the grid of the next simtime, in kW
+
+		
+		try {
+			newSimulationData[DEMAND_SERIES_INDEX] = (float) ns.getSubstationSensor(SensorIDS.POWER_DEMAND)/1000; // Getting substation demand of the next simtime, in kW
+			newSimulationData[LOSSES_SERIES_INDEX] = (float) ns.getSubstationSensor(SensorIDS.LOSSES)/1000; // Getting losses of the next simtime, in kW
+		} catch (UnknownSensor e) {
+			e.printStackTrace();
+		}
+
+		//Updating data for summary chart (substation demand)
+		
+		//	demandCurve.offer(newSimulationData[DEMAND_SERIES_INDEX]);
+			lastDemand=newSimulationData[DEMAND_SERIES_INDEX];
+			lastGeneration=newSimulationData[GENERATION_SERIES_INDEX];
+			lastConsumption=newSimulationData[CONSUMPTION_SERIES_INDEX] ;
+			
+		
+	//		System.out.println(getTime()+"=demand:"+lastDemand+" gen:"+lastGeneration+" lastcons:"+lastConsumption+" import:"+lastImport+" export:"+lastExport);
+
+		
+
+	
+
+		// Updating tariff period and price
+		if(tariff!=null){
+			//labelTariff.setVisible(true);
+			//labelPeriod.setVisible(true);
+			currentTariffPeriod = tariff.getPeriod(timestamp);
+			currentTariffPrice = tariff.getEnergyPrice(currentTariffPeriod);
+			//labelPeriod.setText(currentTariffPeriod+" ("+currentTariffPrice+" €/kWh)");
+			//labelPeriod.setForeground(tariff.getPeriodColor(currentTariffPeriod));
+		}
+		
+		// Updating system losses
+		//labelLosses.setVisible(true);
+		//labelLosses.setText("Losses: "+decimalFormat.format(newSimulationData[LOSSES_SERIES_INDEX])+" kW");
+
+		// Calculating imported energy, exported energy and bill
+		double energyOfLastCycle = (newSimulationData[DEMAND_SERIES_INDEX]*(cycleTimeInMillis/60000.0))/1000;
+		if(newSimulationData[DEMAND_SERIES_INDEX]>=0){
+			importedEnergy+=energyOfLastCycle;
+			if(tariff!=null){
+				bill+=(energyOfLastCycle*currentTariffPrice);
+			}
+			lastImport=Math.abs(energyOfLastCycle);
+			lastExport=0;
+		}else{
+			exportedEnergy+=Math.abs(energyOfLastCycle);
+			if(tariff!=null){
+				bill+=(Math.abs(energyOfLastCycle)*tariff.getFineForExporting(tariff.getPeriod(timestamp)));
+			}
+			lastImport=0;
+			lastExport=Math.abs(energyOfLastCycle);
+		}
+
+		// Calculating energy losses
+		energyLosses+=(newSimulationData[LOSSES_SERIES_INDEX]*(cycleTimeInMillis/60000.0));
+
+		// UPDATING WEATHER CHART
+		float[] newWeatherData = new float[2];
+		newWeatherData[0] =  (float)rs.getSunPercentage(timestamp); // Getting the % of sun of the next simulation time
+		newWeatherData[1] = (float)rs.getWindPercentage(timestamp); // Getting the % of wind of the next simulation time
+		//weatherChart.getDataset().advanceTime();  // Advance to the next simtime
+		//weatherChart.getDataset().appendData(newWeatherData); //Append new data to the chart dataset
+		try {
+			long millisSpent=(new Date().getTime()-init.getTime());
+			if (realTimeCycleLengthMillis>millisSpent)
+			Thread.currentThread().sleep(realTimeCycleLengthMillis-millisSpent);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		lastTimeStamp=timestamp;
+	} // End of processCycleStatus
 
 	private void forEachTransformerSensor(
 			Date timestamp,
@@ -232,6 +436,13 @@ public class GridLabSimulatorService implements NetworkListener, Service {
 	public Set<ElementEMS> getElementsByTransformer(String transformerName)
 	{
 		return this.nes.getElementsByTransformer(transformerName);
+	}
+	
+	public Set<ElementEMS> getGeneratorsByTransformer(String transformerName)
+	{
+		HashSet<ElementEMS> set = new HashSet<ElementEMS>(this.nes.getElementsByTransformer(transformerName));
+		 set.removeIf(s -> s.getType()!=TypesElement.GENERATOR);
+		 return set;
 	}
 
 	public Hashtable<SensorIDS, Float> getTransformerSensors(String tName,
@@ -278,6 +489,7 @@ public class GridLabSimulatorService implements NetworkListener, Service {
 
 	public void executeOrder(JsonOrder<?> order)
 	{
+		System.err.println(order);
 		this.gldes.getSimulator()
 				.queueOrder(order.toOrder(getTime(), this.paths));
 	}
@@ -364,7 +576,7 @@ public class GridLabSimulatorService implements NetworkListener, Service {
 	/* 219 */     this.importedEnergy = 0.0F;
 	/* 220 */     this.exportedEnergy = 0.0F;
 	/* 221 */     this.energyLosses = 0.0F;
-	/* 222 */     this.bill = 0.0D;
+	/* 222 */     this.bill = 0.0F;
 	/* 223 */     this.tariff = tarif;
 //	/* 224 */     this.mainFrame = new JFrame(title);
 	/* 225 */     this.activeClients = activeClients;
@@ -519,6 +731,10 @@ public class GridLabSimulatorService implements NetworkListener, Service {
 	public int getPendingOrdersSize()
 	{
 		return this.gldes.getSimulator().getPendingOrders().size();
+	}
+
+	public ElementEMS getElementByName(String found) {
+		return this.nes.getElementByName(found);
 	}
 
 }

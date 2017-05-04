@@ -16,8 +16,8 @@ import net.sf.sgsimulator.sgsrest.vertx.services.GridLabSimulatorService;
 
 @Controller("/sg/query")
 public class QueryController {
-
-	@Service("GridLabSimulatorService")
+	
+		@Service("GridLabSimulatorService")
 	private GridLabSimulatorService gL;
 
 	@GET("/applied-orders")
@@ -38,6 +38,14 @@ public class QueryController {
 	{
 		return jsonResponse(gL::getSubstationSensors);
 	}
+	
+	@GET("/currentbill")
+	public String getCurrentBill() throws RemoteException
+	{
+		return jsonResponse(gL::getCurrentBill);
+	}
+	
+	
 
 	@GET("/losses-sensor")
 	public String getLossesSensor()
@@ -74,6 +82,16 @@ public class QueryController {
 				.map(e -> e.getName()).collect(Collectors.toList()));
 
 	}
+	
+	@GET("/transformer-generators")
+	public String getGeneratorsByTransformer(
+			@Param(value = "transformer-name", mandatory = true) String tN)
+	{
+		return jsonResponse(() -> gL.getGeneratorsByTransformer(tN).stream()
+				.map(e -> e.getName()).collect(Collectors.toList()));
+
+	}
+
 
 	@GET("/device-sensors")
 	public String getDeviceSensors(

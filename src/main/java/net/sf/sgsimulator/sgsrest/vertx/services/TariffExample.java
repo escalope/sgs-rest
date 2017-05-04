@@ -53,4 +53,16 @@ public class TariffExample implements Tariff {
 		}
 	}
 
+	@Override
+	public double getFineForExporting(String period) {
+		// TODO Auto-generated method stub
+		if (period.equals("P1"))
+		{
+			return 0.0068219;
+		} else
+		{
+			return 0.0045724;
+		}
+	}
+
 }

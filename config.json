@@ -7,8 +7,8 @@
 	  "GridLabSimulatorService":"net.sf.sgsimulator.sgsrest.vertx.services.GridLabSimulatorService"
 	},
 "gridlab":{
-	"startDate":[2014, 4, 15, 6, 0, 0],
-	"cycleTimeInMillis":60000,
+	"startDate":[2014, 4, 15, 6, 6, 0],
+	"cycleTimeInMillis":240000,
 	"intelligence":true,
 	"moments":30,
 	"activeClients":true,

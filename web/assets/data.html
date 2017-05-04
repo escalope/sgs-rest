@@ -8,18 +8,55 @@
 <title>SG Charts</title>
 </head>
 <body>
-	<div style="height: 400px;">
+	<div style="height: 200px;">
 		<div id="chart1"></div>
 	</div>
-	<div>
-		<select id="transformers"></select>
+    
+    <div style="height: 200px;">
+
+                <div id="chart2"></div>
+	</div>
+    <div>    
+        <b>Current bill (€):</b> <div id="bill"></div>
+        <b>Power balance (kW):</b> <div id="accumpower"></div>
+    
+    </div>
+     
+	<div id="transformers">
+		
 		<ul id="transformer-elements"></ul>
 	</div>
+    
+    
 	<div class="toggle toggle-modern"></div>
-
-</body>
-
 <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
 <script src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
 <script src="/assets/sg.js"></script>
+<script  type="text/javascript">
+
+
+    updateCounterListener("bill","#bill");
+    updateCounterListener("powerdump","#accumpower");
+charts.chart1.render();
+updateListeners("generation",charts.chart1,LASTGENERATED);
+updateListeners("consumption",charts.chart1,LASTCONSUMPTION);
+updateListeners("demand",charts.chart1,LASTDEMAND);
+
+charts.chart2.render();
+updateListeners("wind",charts.chart2,WIND);
+updateListeners("sun",charts.chart2,SUN);
+
+
+    $.getJSON("/sg/query/transformer-names", function (data) {
+        var items = [];
+        console.log(data);
+        $.each(data.result, function (index, tName) {
+            updateTransformers(tName);
+        });
+    });
+    
+</script>
+</body>
+
+
 </html>
