@@ -45,7 +45,7 @@ charts.chart1 = new CanvasJS.Chart("chart1", {
 				
 				
 			},
-height: 200,
+height: 400,
     data: [
 
 {
@@ -70,7 +70,7 @@ charts.chart2 = new CanvasJS.Chart("chart2", {
     title: {
         text: "Weather"
     },
-height: 200,
+height: 400,
      legend: {
       horizontalAlign: "right", // "center" , "right"
        verticalAlign: "top",  // "top" , "bottom"
@@ -107,7 +107,7 @@ charts.chart3 = new CanvasJS.Chart("chart3", {
     title: {
         text: "BILLING"
     },
-height: 200,
+height: 400,
      legend: {
       horizontalAlign: "right", // "center" , "right"
        verticalAlign: "top",  // "top" , "bottom"
@@ -125,7 +125,7 @@ charts.chart4 = new CanvasJS.Chart("chart4", {
     title: {
         text: "Total Power Demand From Substation"
     },
-height: 200,
+height: 400,
      legend: {
       horizontalAlign: "right", // "center" , "right"
        verticalAlign: "top",  // "top" , "bottom"
@@ -176,7 +176,8 @@ updateCounterListener = function(eventname,divid){
 
  
 
-deactivatePanel=function(buttonText,indice){
+
+deactivatePanel=function(buttonText,indice,maxp){
 return function () {
                     requestdata={"deviceName":buttonText};
                     $.ajax({url: "/sg/execute/switch-off",
@@ -188,13 +189,13 @@ return function () {
                           "cache-control" : "no-cache",
                         contentType: "application/json; charset=utf-8",      
                         complete: function(jsondata){$("#btn_"+indice).text(texto+":last order was off");}}).done(function (response) {
-$("#btn_"+indice).click(activatePanel(buttonText,indice));
+$("#btn_"+indice).click(activatePanel(buttonText,indice,maxp));
    
 });
                 }
 }
 
-activatePanel=function(buttonText,indice){
+activatePanel=function(buttonText,indice,maxp){
 return function () {
                     requestdata={"deviceName":buttonText};
                     $.ajax({url: "/sg/execute/switch-on",
@@ -206,21 +207,21 @@ return function () {
                           "cache-control" : "no-cache",
                         contentType: "application/json; charset=utf-8",      
                         complete: function(jsondata){$("#btn_"+indice).text(texto+":last order was on");}}).done(function (response) {
-$("#btn_"+indice).click(deactivatePanel(buttonText,indice));
+$("#btn_"+indice).click(deactivatePanel(buttonText,indice,maxp));
    
 });
                 }
 }
 
-generatePanel=function(panelName, index){
+generatePanel=function(tName,panelName, index,maxp){
             texto=panelName;
             indice=index;
-            $("#transformer-elements").append($('<button/>', {
+            $("#"+tName).append($('<button/>', {
                 text: texto + ":on",
                 id: 'btn_' + indice,
-                click: deactivatePanel(texto, indice)
+                click: deactivatePanel(texto, indice,maxp)
             }));
-            $("#transformer-elements").append('<br/>');
+            $("#"+tName).append(' Max power '+maxp+' kW<br/>');
 }
 
 panelIndexes=0;
@@ -230,9 +231,14 @@ updateTransformers = function (tName) {
     $.getJSON("/sg/query/transformer-generators", {
         "transformer-name": tName
     }, function (data) {
-        $("#transformer-elements").append("<h2>"+tName+"</h2>");
+        $("#transformer-elements").append("<div id=\""+tName+"\"><h2>"+tName+"</h2></div>");
         for (var i = 0; i < data.result.length; i++) {
-            generatePanel(data.result[i],panelIndexes);                        
+            {var pname=data.result[i];
+             var index=panelIndexes;
+            $.getJSON("/sg/query/solarpanel-power", {"solar-panel":pname},function(power){
+                    generatePanel(tName,pname,index,Math.abs(power.result)/1000);                   
+            });            
+            }   
             panelIndexes=panelIndexes+1;
         }
     });

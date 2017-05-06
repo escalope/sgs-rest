@@ -1,20 +1,24 @@
 {
 "host":"localhost",
-"port":8080,
+"adminip":"localhost",
+"port":60000,
 "src-package": "net.sf.sgsimulator.sgsrest.vertx",
 "services":
 	{
 	  "GridLabSimulatorService":"net.sf.sgsimulator.sgsrest.vertx.services.GridLabSimulatorService"
 	},
 "gridlab":{
-	"startDate":[2014, 4, 15, 6, 6, 0],
-	"cycleTimeInMillis":240000,
+	"startDate":[2014, 4, 15, 8, 0, 0],
+	"endDate":[2014,4, 15, 10, 0, 0],
+	"cycleTimeInMillis":60000,
 	"intelligence":true,
 	"moments":30,
 	"activeClients":true,
 	"configurationFile":"files/griddef/configuration.glm",
 	"gridFile":"files/griddef/grid.xml",
 	"scenarioFile":"files/griddef/scenario.csv",
-	"gridLabFolder":"gridlab/"
+	"gridLabFolder":"gridlab/",
+	"_comment":"fulloperational|fullsolarbyperson|centralized",
+	"scenario":"centralized"
 }
 }

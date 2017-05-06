@@ -1,3 +1,23 @@
+/*
+	This file is part of SGSim-REST framework, a game to learn coordination protocols with microgrids
+	
+    Copyright (C) 2017 Rafael Pax, Jorge J. Gomez-Sanz
+    based on code by Jorge J. Gomez Sanz, Nuria Cuartero-Soler, Sandra Garcia-Rodriguez
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package net.sf.sgsimulator.sgsrest.vertx.services;
 
 import java.awt.Color;
@@ -106,12 +126,20 @@ public class GridLabSimulatorService implements NetworkListener, Service {
 		Tariff tariff = new TariffExample();
 
 		JsonArray sdjson = config.getJsonArray("startDate");
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(
+		JsonArray edjson = config.getJsonArray("endDate");
+		Calendar calendarStart = Calendar.getInstance();
+		calendarStart.set(
 				sdjson.getInteger(0), sdjson.getInteger(1),
 				sdjson.getInteger(2), sdjson.getInteger(3),
 				sdjson.getInteger(4), sdjson.getInteger(5));
+		
+		Calendar calendarEnd = Calendar.getInstance();
+		calendarEnd.set(
+				edjson.getInteger(0), edjson.getInteger(1),
+				edjson.getInteger(2), edjson.getInteger(3),
+				edjson.getInteger(4), edjson.getInteger(5));
 
+		
 		String configurationFile = config.getString("configurationFile");
 		String gridFile = config.getString("gridFile");
 		// definition
@@ -121,10 +149,12 @@ public class GridLabSimulatorService implements NetworkListener, Service {
 				gridLabFolder);
 
 		Date[] dates = readSimulationTime(paths.getNetXmlSrcFile());
-		long diffInMillies = dates[1].getTime() - dates[0].getTime();
+		long diffInMillies = calendarEnd.getTimeInMillis() - calendarStart.getTimeInMillis();
+		
 		int hoursOfSimulation = (int) TimeUnit.HOURS.convert(diffInMillies,
 				TimeUnit.MILLISECONDS);
-		init(title, dates[0], cycleTimeInMillis, paths, intelligence,
+		startDate=calendarStart.getTime();
+		init(title, startDate, cycleTimeInMillis, paths, intelligence,
 				hoursOfSimulation, tariff, moments, minRange, maxRange,
 				activeClients);
 	}
@@ -145,7 +175,7 @@ public class GridLabSimulatorService implements NetworkListener, Service {
 			}
 			
 		} catch (GridlabException | SimulatorNotInitializedException e)
-		{
+		{ e.printStackTrace();
 			future.fail(e);
 		}
 	}
@@ -595,18 +625,7 @@ public class GridLabSimulatorService implements NetworkListener, Service {
 	/* 238 */       chartCalendar.setTime(startDate);
 	/* 239 */       chartCalendar.add(14, -minutesToStartCharts);
 	/*     */       
-	//XXX DONE in start() method
-//=======================
-//	/* 241 */       initSimulator(startDate, 14, cycleTimeInMillis, paths, intelligence);
-//=======================
-//	/* 242 */       initSimulationChart(minRange, maxRange, chartCalendar.getTime());
-//	/* 243 */       initWeatherChart(chartCalendar.getTime());
-//	/* 244 */       initFramePowerGridVisualizer(paths);
-//	/* 245 */       initCtsDisplayer();
-//	/* 246 */       initEventsDisplayer();
-//	/*     */     } catch (GridlabException e) {
-//	/* 248 */       e.printStackTrace();
-//	/*     */     }
+
 	/*     */   }
 
 	/*     */   protected void initSimulator(Date startDate, int timeUnit, int timeUnitAmount, PATHS paths, boolean intelligence)
