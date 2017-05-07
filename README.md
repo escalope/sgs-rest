@@ -39,14 +39,22 @@ Check it works running in a console "javac" and "mvn". If "command not found" er
 Instructions:
 ------
 
-1. edit config.json to set the "host" and "adminip". By default, these are set to "localhost". If you want to offer the service OUTSIDE your computer, set this to the static/dynamic IP of the host. Think twice about the "adminip". It is valid to have a static ip in "host" and "localhost" in "adminip". This setup ensures that only requests coming from localhost will be attended and other computers will be excluded. This is only working in setups where the server and the admin are in the same computer. Run "ifconfig" in linux or "ipconfig" in windows to get this IP. Set a suitable port. If no program is using it, port 80 or 8080 is an option too. By default, the port is 60000. Set the operation mode (see description for more details).
-2. launch the system with "sh launch.sh" or "launch.bat"
-3. Copy the addresses you will see in the console. The "/sg/pages/panel" is to be allocated to the students. You can check progress with the admin pages "/sg/pages/admin" and "/sg/pages/screen".
-
+1. launch the system with "sh launch.sh" or "launch.bat"
+2. Copy the addresses you will see in the console. The "/sg/pages/panel" is to be allocated to the students. You can check progress with the admin pages "/sg/pages/admin" and "/sg/pages/screen".
+3. open a browser and access the addresses
 
 If you want to see a representation of the microgrid
 
 mvn clean compile exec:java -Dexec.mainClass="net.sf.sgsimulator.sgsrest.Viewer"
+
+Advanced setup
+------
+
+1. No aditional setup is needed for a default run, but you may want to configure the service
+2. the "host" and "adminip" are, by default, set to "0.0.0.0" (serve the service through all interfaces) and "localhost" (access as an admin only in the localhost which is also providing the service). If you want to offer the service in a specific interface of your computer (e.g. only available from the same hosting computer), set this to the static/dynamic IP of the host you are interested into (e.g. each interface your computer uses, like network cards or wifi dongles, is associated to a specific ip, find out with "ifconfig" in linux and "ipconfig" in windows). Think twice about the "adminip". It is valid to have a static ip in "host" and "localhost" in "adminip". This setup ensures that only requests coming from localhost will be attended and other computers will be excluded. This is only working in setups where the server and the admin are in the same computer. For accessing the host from a remote computer as an admin, write in the "adminip" the ip you know you are going to use. 
+3. Set a suitable port. If no program is using it, port 80 or 8080 is an option too. By default, the port is 60000. Set the operation mode (see description for more details). This port may not be valid for protected wifis. Check with your sysadmin to know which ports are accesible. 
+4. The network can be modified. Check the files/griddef/grid.xml and http://sgsimulator.sf.net to know more
+5. The weather and load parameters of the game can be modified too. File files/griddev/scenario.csv can be edited with an calc sheet or text editor. It tells, every hour of the day, the amount of maximum solar/wind production and consumption that will be attained.
 
 Credits
 ---------
