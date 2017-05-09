@@ -112,6 +112,7 @@ public class GridLabSimulatorService implements NetworkListener, Service {
 	private GridLabDiscreteEventSimulator gldes;
 	private Date startDate;
 	private PATHS paths;
+	private Double millisperwebpoll;
 
 	private void onInit(Vertx vertx, JsonObject config) throws IOException
 	{
@@ -121,6 +122,7 @@ public class GridLabSimulatorService implements NetworkListener, Service {
 		int moments = config.getInteger("moments");// 30;
 		Double minRange = config.getDouble("minRange", null);
 		Double maxRange = config.getDouble("maxRange", null);
+		millisperwebpoll = config.getDouble("millisperwebpoll", null);
 		boolean activeClients = config.getBoolean("activeClients");// true;
 		// TODO parametrize
 		Tariff tariff = new TariffExample();
@@ -204,12 +206,16 @@ public class GridLabSimulatorService implements NetworkListener, Service {
 		this.handlers.values().forEach(h -> h.accept(evt));
 	}
 
+	Date lastTime=new Date();
 	@Override
 	public void processCycleStatus(
 			NetworkStatus ns,
 			NetworkElementsStatus nes,
 			Date timestampDate)
 	{
+	Date cdate=new Date();
+	if (cdate.getTime()-lastTime.getTime()>millisperwebpoll){
+		lastTime=cdate;
 
 		/*
 		 * Consumption
@@ -311,8 +317,9 @@ public class GridLabSimulatorService implements NetworkListener, Service {
 		/**
 		 * Compute bill, generated energy, and 
 		 */
-				
+		}		
 		computeAdditionalCycleStatus(ns,nes,timestampDate);
+		
 	}
 	
 
