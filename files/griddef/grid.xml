@@ -94,7 +94,7 @@ xsi:schemaLocation="http://www.example.org/network ../../../../target/resources/
 						<name>Solar_11</name>
 						<phases>ABCN</phases>
 						<nominal_voltage>400</nominal_voltage>
-						<max_power>10000</max_power>
+						<max_power>5000</max_power>
 						<wire_length>49.1</wire_length>
 						<configuration>line_configuration_LV</configuration>
 						<connected_to>Building_13</connected_to>
@@ -120,7 +120,7 @@ xsi:schemaLocation="http://www.example.org/network ../../../../target/resources/
 						<name>Solar_21</name>
 						<phases>ABCN</phases>
 						<nominal_voltage>400</nominal_voltage>
-						<max_power>10000</max_power>
+						<max_power>7000</max_power>
 						<wire_length>49.1</wire_length>
 						<configuration>line_configuration_LV</configuration>
 						<connected_to>transformerCT2_1</connected_to>
@@ -162,7 +162,7 @@ xsi:schemaLocation="http://www.example.org/network ../../../../target/resources/
 						<name>Solar_221</name>
 						<phases>ABCN</phases>
 						<nominal_voltage>400</nominal_voltage>
-						<max_power>10000</max_power>
+						<max_power>1000</max_power>
 						<wire_length>49.1</wire_length>
 						<configuration>line_configuration_LV</configuration>
 						<connected_to>Building_22</connected_to>
@@ -173,7 +173,7 @@ xsi:schemaLocation="http://www.example.org/network ../../../../target/resources/
 						<name>Solar_222</name>
 						<phases>ABCN</phases>
 						<nominal_voltage>400</nominal_voltage>
-						<max_power>10000</max_power>
+						<max_power>3000</max_power>
 						<wire_length>49.1</wire_length>
 						<configuration>line_configuration_LV</configuration>
 						<connected_to>Building_21</connected_to>
@@ -232,7 +232,7 @@ xsi:schemaLocation="http://www.example.org/network ../../../../target/resources/
 						<name>Solar_312</name>
 						<phases>ABCN</phases>
 						<nominal_voltage>400</nominal_voltage>
-						<max_power>10000</max_power>
+						<max_power>8000</max_power>
 						<wire_length>49.1</wire_length>
 						<configuration>line_configuration_LV</configuration>
 						<connected_to>Building_32</connected_to>

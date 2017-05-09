@@ -225,6 +225,7 @@ generatePanel=function(tName,panelName, index,maxp){
 }
 
 panelIndexes=0;
+var pname="";
 updateTransformers = function (tName) {
     //$("#transformer-elements").empty();    
     
@@ -232,14 +233,22 @@ updateTransformers = function (tName) {
         "transformer-name": tName
     }, function (data) {
         $("#transformer-elements").append("<div id=\""+tName+"\"><h2>"+tName+"</h2></div>");
-        for (var i = 0; i < data.result.length; i++) {
-            {var pname=data.result[i];
-             var index=panelIndexes;
-            $.getJSON("/sg/query/solarpanel-power", {"solar-panel":pname},function(power){
-                    generatePanel(tName,pname,index,Math.abs(power.result)/1000);                   
-            });            
+        for (var i = 0, pname=""; i < data.result.length; i++) {
+            {pname=data.result[i];            
+            $.ajax({type:"GET",
+                    datatype:"json",
+                    async: false,
+                    url:"/sg/query/solarpanel-power", 
+                    data: {"solar-panel":pname},
+                    success: function(power){
+                    
+                    generatePanel(tName,pname,panelIndexes,Math.abs(power.result)/1000);   
+                    panelIndexes=panelIndexes+1;           
+                    console.log(pname);
+                    console.log(panelIndexes);
+            }});            
             }   
-            panelIndexes=panelIndexes+1;
+           
         }
     });
 }
