@@ -1,6 +1,6 @@
 {
 "host":"0.0.0.0",
-"adminip":"localhost",
+"adminip":"127.0.0.1",
 "port":60000,
 "src-package": "net.sf.sgsimulator.sgsrest.vertx",
 "services":
@@ -12,6 +12,7 @@
 	"endDate":[2014,4, 15, 10, 0, 0],
 	"cycleTimeInMillis":60000,
 	"intelligence":true,
+	"millisperwebpoll":1000,
 	"moments":30,
 	"activeClients":true,
 	"configurationFile":"files/griddef/configuration.glm",

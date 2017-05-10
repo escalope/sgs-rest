@@ -241,8 +241,8 @@ updateTransformers = function (tName) {
                     url:"/sg/query/solarpanel-power", 
                     data: {"solar-panel":pname},
                     success: function(power){
-                    
-                    generatePanel(tName,pname,panelIndexes,Math.abs(power.result)/1000);   
+                    var jsonobject=JSON.parse(power);
+                    generatePanel(tName,pname,panelIndexes,Math.abs(jsonobject.result)/1000);   
                     panelIndexes=panelIndexes+1;           
                     console.log(pname);
                     console.log(panelIndexes);

@@ -25,7 +25,9 @@ import java.net.SocketException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.Enumeration;
+import java.util.Random;
 
 import com.github.aesteve.vertx.nubes.VertxNubes;
 
@@ -69,9 +71,17 @@ public class SGSVertxServer {
 		{
 			configFile = args[0];
 		}
+		
 		Path configPath = Paths.get(configFile);
 		JsonObject config = new JsonObject(new String(Files.readAllBytes(configPath)));
-
+		
+		Random r = new Random(new Date().getTime());
+		char c1 = (char)(r.nextInt(26) + 'a');
+		char c2 = (char)(r.nextInt(26) + 'a');
+		char c3 = (char)(r.nextInt(26) + 'a');
+		String admincode=""+c1+c2+c3;
+		System.getProperties().put("sgsimulator.admincode", admincode);
+		
 		Vertx vertx = Vertx.vertx();
 		System.out.println("****************************");
 		System.out.println("Starting...");
@@ -81,7 +91,7 @@ public class SGSVertxServer {
 		System.out
 				.println("Admin interface (only allowed from " + config.getString("adminip") + ":");
 		System.out.println("http://" + config.getString("host") + ":" + config.getInteger("port")
-				+ "/sg/pages/admin");
+				+ "/sg/pages/admin/"+admincode);
 		System.out.println("Projector screen interface (only allowed from "
 				+ config.getString("adminip") + ":");
 		System.out.println("http://" + config.getString("host") + ":" + config.getInteger("port")

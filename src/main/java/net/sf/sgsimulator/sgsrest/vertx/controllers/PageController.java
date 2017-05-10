@@ -72,17 +72,28 @@ public class PageController {
 	}
 	
 	
+	/*@GET("/admin/:code")
+	public synchronized String getAdmin(RoutingContext ctx,
+			@Param(value = "code", mandatory = true) String code) {*/
 	@GET("/admin")
 	public synchronized String getAdmin(RoutingContext ctx) {
+	
 		SocketAddress remote = ctx.request().remoteAddress();
 		JsonObject obj = new JsonObject().put("host", remote.host()).put("port", remote.port());
 		// ctx.response().end(obj.encodePrettily());
 		String host = obj.getString("host");
 		String allowedhost="localhost";
+		String admincode=System.getProperties().get("sgsimulator.admincode").toString();
+		
+		/*if (!admincode.equalsIgnoreCase(code)){
+			Log.error("ILLEGAL ACCESS FROM IP "+host);
+			return "<H1>WARNING: illegal attempt to access admin interface from IP "+host+". Police will be notified </H1>";
+		}*/
+		
 		if (System.getProperties().get("sgsimulator.adminip") != null)
 			allowedhost=System.getProperties().get("sgsimulator.adminip").toString();
 		
-		if (host.equalsIgnoreCase(allowedhost)){
+		if (!host.equalsIgnoreCase(allowedhost)){
 			Log.error("ILLEGAL ACCESS FROM IP "+host);
 			return "<H1>WARNING: illegal attempt to access admin interface from IP "+host+". Police will be notified </H1>";
 		}
@@ -141,7 +152,7 @@ public class PageController {
 		if (System.getProperties().get("sgsimulator.adminip") != null)
 			allowedhost=System.getProperties().get("sgsimulator.adminip").toString();
 		
-		if (host.equalsIgnoreCase(allowedhost)){
+		if (!host.equalsIgnoreCase(allowedhost)){
 			Log.error("ILLEGAL ACCESS FROM IP "+host);
 			return "<H1>WARNING: illegal attempt to access admin interface from IP "+host+". Police will be notified </H1>";
 		}
