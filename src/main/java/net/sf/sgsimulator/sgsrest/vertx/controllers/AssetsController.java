@@ -48,6 +48,9 @@ public class AssetsController {
 	public String getAsset(
 			@Param(value = "assetname", mandatory = true) String file)
 	{
+		
+		if (!file.matches("^[\\w,\\s-]+\\.([A-Za-z]|[A-Za-z][A-Za-z]|[A-Za-z][A-Za-z][A-Za-z])$"))
+			return "Invalid file name "+file;
 		String fileName="web/assets/"+file;
 		try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
 

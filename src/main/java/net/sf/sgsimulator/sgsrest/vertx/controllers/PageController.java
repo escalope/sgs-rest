@@ -54,7 +54,7 @@ public class PageController {
 	int counter = 0;
 	int id = 0;
 
-	String billing = "<div style='font-size: xx-large;'><b>Current bill (€):</b> <div id=\"bill\"></div></div>\n";
+	String billing = "<div style='font-size: xx-large;'><b>Current bill (euros):</b> <div id=\"bill\"></div></div>\n";
 	String chartMetering = "<div style=\"height: 400px;\">		<div id=\"chart1\"></div>	</div>\n";
 	String chartWeather = "<div style=\"height: 400px;\">                <div id=\"chart2\"></div></div>\n";
 	String ballance = "<div style='font-size: xx-large;'><b>Power balance (kW):</b><div id=\"accumpower\"></div></div>\n";

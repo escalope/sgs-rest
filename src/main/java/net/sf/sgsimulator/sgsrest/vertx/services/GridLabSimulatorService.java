@@ -414,7 +414,7 @@ public class GridLabSimulatorService implements NetworkListener, Service {
 			//labelPeriod.setVisible(true);
 			currentTariffPeriod = tariff.getPeriod(timestamp);
 			currentTariffPrice = tariff.getEnergyPrice(currentTariffPeriod);
-			//labelPeriod.setText(currentTariffPeriod+" ("+currentTariffPrice+" €/kWh)");
+			//labelPeriod.setText(currentTariffPeriod+" ("+currentTariffPrice+" euros/kWh)");
 			//labelPeriod.setForeground(tariff.getPeriodColor(currentTariffPeriod));
 		}
 		
