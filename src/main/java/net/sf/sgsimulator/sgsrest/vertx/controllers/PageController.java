@@ -118,7 +118,7 @@ public class PageController {
 				"});\n"+
 				"});\n";
 
-		page = "<!DOCTYPE html><html><head><link href=\"/assets/sg.css\" />\n"
+		page = "<!DOCTYPE html><html><head><link href=\"/sg/assets/sg.css\" />\n"
 				+ "<style></style><meta charset=\"utf-8\"><title>SG Charts</title></head><body>	\n"
 				+" <H1>Admin panel</H1>"
 				+ "<script src=\"https://code.jquery.com/jquery-3.2.0.min.js\"></script>\n"					
@@ -129,7 +129,7 @@ public class PageController {
 				+"<H2>Assigned panels</h2>"
 				+"<div id='transformer-elements' style=\"text-align: center;\"/>"
 				+ "<script src=\"http://canvasjs.com/assets/script/canvasjs.min.js\"></script>\n"
-				+ "<script src=\"/assets/sg.js\"></script>\n"
+				+ "<script src=\"/sg/assets/sg.js\"></script>\n"
 				+"<script  type=\"text/javascript\">\n"
 				+ "updateCounterListener(\"bill\",\"#bill\");    \n"
 				+ "updateCounterListener(\"powerdump\",\"#accumpower\");\n"
@@ -173,7 +173,7 @@ public class PageController {
 		if (System.getProperties().get("sgsimulator.scenario") == null)
 			System.getProperties().put("sgsimulator.scenario", "solarbyperson");
 
-		page = "<!DOCTYPE html><html><head><link href=\"/assets/sg.css\" />\n"
+		page = "<!DOCTYPE html><html><head><link href=\"/sg/assets/sg.css\" />\n"
 				+ "<style></style><meta charset=\"utf-8\"><title>SG Charts</title></head><body>	\n"
 				+" <H1>Screen panel</H1>"
 				+ "<script src=\"https://code.jquery.com/jquery-3.2.0.min.js\"></script>\n"					
@@ -183,7 +183,7 @@ public class PageController {
 				ballance					
 				+"<div id='transformer-elements' style=\"text-align: center;\"/>"
 				+ "<script src=\"http://canvasjs.com/assets/script/canvasjs.min.js\"></script>\n"
-				+ "<script src=\"/assets/sg.js\"></script>\n"
+				+ "<script src=\"/sg/assets/sg.js\"></script>\n"
 				+"<script  type=\"text/javascript\">\n"
 				+ "updateCounterListener(\"bill\",\"#bill\");    \n"
 				+ "updateCounterListener(\"powerdump\",\"#accumpower\");\n"
@@ -242,7 +242,7 @@ public class PageController {
 			}
 		}*/
 
-			page = "<!DOCTYPE html><html><head><link href=\"/assets/sg.css\" />\n"
+			page = "<!DOCTYPE html><html><head><link href=\"/sg/assets/sg.css\" />\n"
 					+ "<style></style><meta charset=\"utf-8\"><title>SG Charts</title></head><body>	\n"
 					+ "<script src=\"https://code.jquery.com/jquery-3.2.0.min.js\"></script>\n"					
 					+ chartMetering + 
@@ -251,7 +251,7 @@ public class PageController {
 					+"<H2>Assigned panels</h2>"
 					+"<div id='transformer-elements' style=\"text-align: center;\"/>"
 					+ "<script src=\"http://canvasjs.com/assets/script/canvasjs.min.js\"></script>\n"
-					+ "<script src=\"/assets/sg.js\"></script>\n"
+					+ "<script src=\"/sg/assets/sg.js\"></script>\n"
 					+"<script  type=\"text/javascript\">\n"
 					+ "updateCounterListener(\"bill\",\"#bill\");    \n"
 					+ "updateCounterListener(\"powerdump\",\"#accumpower\");\n"
@@ -294,14 +294,14 @@ public class PageController {
 					String panel=remaining.get("panel").remove(0);
 					int id=0;
 					String button = generateButtonCode("transformer-elements", panel,Math.abs(this.gL.getElementByName(panel).getMaxPower()/1000), id);
-					page="<!DOCTYPE html><html><head><link href=\"/assets/sg.css\" />\n"
+					page="<!DOCTYPE html><html><head><link href=\"/sg/assets/sg.css\" />\n"
 							+ "<style></style><meta charset=\"utf-8\"><title>SG Charts</title></head><body>	\n"								
 							+"<H1>Solar Panel node :"+panel+" </H1>"							
 							+ "<script src=\"https://code.jquery.com/jquery-3.2.0.min.js\"></script>\n"+
 							chartWeather
 							+"<div id='transformer-elements' style=\"text-align: center;\"/>"
 							+ "<script src=\"http://canvasjs.com/assets/script/canvasjs.min.js\"></script>\n"
-							+ "<script src=\"/assets/sg.js\"></script>\n"
+							+ "<script src=\"/sg/assets/sg.js\"></script>\n"
 							+"<script  type=\"text/javascript\">\n"
 							+ "updateListeners(\"wind\",charts.chart2,WIND);\n"
 							+ "updateListeners(\"sun\",charts.chart2,SUN);\n" +	
@@ -311,7 +311,7 @@ public class PageController {
 							"</html>\n";
 				}  else
 					if (remaining.get("central").size()>0){
-						page="<!DOCTYPE html><html><head><link href=\"/assets/sg.css\" />\n"
+						page="<!DOCTYPE html><html><head><link href=\"/sg/assets/sg.css\" />\n"
 								+ "<style></style><meta charset=\"utf-8\"><title>SG Charts</title></head><body>	\n"							
 								+"<H1>SCADA central node</H1>"
 								+ "<script src=\"https://code.jquery.com/jquery-3.2.0.min.js\"></script>\n"					
@@ -320,7 +320,7 @@ public class PageController {
 								ballance+
 								billing
 								+ "<script src=\"http://canvasjs.com/assets/script/canvasjs.min.js\"></script>\n"
-								+ "<script src=\"/assets/sg.js\"></script>\n"
+								+ "<script src=\"/sg/assets/sg.js\"></script>\n"
 								+"<script  type=\"text/javascript\">\n"
 								+ "updateCounterListener(\"bill\",\"#bill\");    \n"
 								+ "updateCounterListener(\"powerdump\",\"#accumpower\");\n"
@@ -358,7 +358,7 @@ public class PageController {
 				}
 				if (found != "") {
 					ptrans = generateButtonCode("transformer-elements",found, this.gL.getElementByName(found).getMaxPower(), id);
-					page = "<!DOCTYPE html><html><head><link href=\"/assets/sg.css\" />\n"
+					page = "<!DOCTYPE html><html><head><link href=\"/sg/assets/sg.css\" />\n"
 							+ "<style></style><meta charset=\"utf-8\"><title>SG Charts</title></head><body>	\n"
 							+ "<script src=\"https://code.jquery.com/jquery-3.2.0.min.js\"></script>\n"
 
@@ -368,7 +368,7 @@ public class PageController {
 							+"<H1>Assigned panels</h1>"
 							+"<div id='transformer-elements'/>"
 							+ "<script src=\"http://canvasjs.com/assets/script/canvasjs.min.js\"></script>\n"
-							+ "<script src=\"/assets/sg.js\"></script>\n"
+							+ "<script src=\"/sg/assets/sg.js\"></script>\n"
 							+"<script  type=\"text/javascript\">\n"
 							+ "updateCounterListener(\"bill\",\"#bill\");    \n"
 							+ "updateCounterListener(\"powerdump\",\"#accumpower\");\n"
