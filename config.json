@@ -1,6 +1,6 @@
 {
 "host":"0.0.0.0",
-"adminip":"127.0.0.1",
+"adminip":"-1",
 "port":60000,
 "src-package": "net.sf.sgsimulator.sgsrest.vertx",
 "services":
