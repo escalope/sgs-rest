@@ -189,6 +189,7 @@ return function () {
                           "cache-control" : "no-cache",
                         contentType: "application/json; charset=utf-8",      
                         complete: function(jsondata){$("#btn_"+indice).text(texto+":last order was off");}}).done(function (response) {
+$("#btn_"+indice).unbind( "click" );
 $("#btn_"+indice).click(activatePanel(buttonText,indice,maxp));
    
 });
@@ -207,6 +208,9 @@ return function () {
                           "cache-control" : "no-cache",
                         contentType: "application/json; charset=utf-8",      
                         complete: function(jsondata){$("#btn_"+indice).text(texto+":last order was on");}}).done(function (response) {
+
+$("#btn_"+indice).unbind( "click" );
+
 $("#btn_"+indice).click(deactivatePanel(buttonText,indice,maxp));
    
 });
@@ -216,7 +220,7 @@ $("#btn_"+indice).click(deactivatePanel(buttonText,indice,maxp));
 generatePanel=function(tName,panelName, index,maxp){
             texto=panelName;
             indice=index;
-            $("#"+tName).append($('<button/>', {
+        $("#"+tName).append($('<button/>', {
                 text: texto + ":on",
                 id: 'btn_' + indice,
                 click: deactivatePanel(texto, indice,maxp)

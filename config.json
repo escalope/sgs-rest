@@ -10,9 +10,9 @@
 "gridlab":{
 	"startDate":[2014, 4, 15, 8, 0, 0],
 	"endDate":[2014,4, 15, 10, 0, 0],
-	"cycleTimeInMillis":60000,
+	"cycleTimeInMillis":30000,
 	"intelligence":true,
-	"millisperwebpoll":1000,
+	"millisperwebpoll":100,
 	"moments":30,
 	"activeClients":true,
 	"configurationFile":"files/griddef/configuration.glm",
