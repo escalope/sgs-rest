@@ -219,7 +219,6 @@ public class PageController {
 		JsonObject obj = new JsonObject().put("host", remoteHost).put("port", remote.port());
 		// ctx.response().end(obj.encodePrettily());
 		String host = obj.getString("host");
-		System.out.println(ctx.request().getHeader(""));
 
 		if (panelPerKey.containsKey(host))
 			return panelPerKey.get(host);
