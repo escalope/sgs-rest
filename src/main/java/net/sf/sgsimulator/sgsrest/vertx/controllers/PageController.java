@@ -79,7 +79,10 @@ public class PageController {
 	public synchronized String getAdmin(RoutingContext ctx) {
 
 		SocketAddress remote = ctx.request().remoteAddress();
-		JsonObject obj = new JsonObject().put("host", remote.host()).put("port", remote.port());
+		String remoteHost=ctx.request().getHeader("X-Forwarded-For");
+		if (remoteHost==null)
+			remoteHost=remote.host();
+		JsonObject obj = new JsonObject().put("host", remoteHost).put("port", remote.port());
 		// ctx.response().end(obj.encodePrettily());
 		String host = obj.getString("host");	
 		String admincode=System.getProperties().get("sgsimulator.admincode").toString();
@@ -149,8 +152,11 @@ public class PageController {
 	String allowedhost="";
 	@GET("/screen")
 	public synchronized String getToProjectScreen(RoutingContext ctx) {
-		SocketAddress remote = ctx.request().remoteAddress();
-		JsonObject obj = new JsonObject().put("host", remote.host()).put("port", remote.port());
+		SocketAddress remote = ctx.request().remoteAddress();		
+		String remoteHost=ctx.request().getHeader("X-Forwarded-For");
+		if (remoteHost==null)
+			remoteHost=remote.host();
+		JsonObject obj = new JsonObject().put("host", remoteHost).put("port", remote.port());
 		// ctx.response().end(obj.encodePrettily());
 		String host = obj.getString("host");		
 		if (allowedhost.isEmpty()){
@@ -207,9 +213,13 @@ public class PageController {
 	@GET("/panel")
 	public synchronized String getPanel(RoutingContext ctx) {
 		SocketAddress remote = ctx.request().remoteAddress();
-		JsonObject obj = new JsonObject().put("host", remote.host()).put("port", remote.port());
+		String remoteHost=ctx.request().getHeader("X-Forwarded-For");
+		if (remoteHost==null)
+			remoteHost=remote.host();
+		JsonObject obj = new JsonObject().put("host", remoteHost).put("port", remote.port());
 		// ctx.response().end(obj.encodePrettily());
 		String host = obj.getString("host");
+		System.out.println(ctx.request().getHeader(""));
 
 		if (panelPerKey.containsKey(host))
 			return panelPerKey.get(host);
