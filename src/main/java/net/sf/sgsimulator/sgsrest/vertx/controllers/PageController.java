@@ -121,14 +121,14 @@ public class PageController {
 		page = "<!DOCTYPE html><html><head><link href=\"/sg/assets/sg.css\" />\n"
 				+ "<style></style><meta charset=\"utf-8\"><title>SG Charts</title></head><body>	\n"
 				+" <H1>Admin panel</H1>"
-				+ "<script src=\"https://code.jquery.com/jquery-3.2.0.min.js\"></script>\n"					
+				+ "<script src=\"/sg/assets/jquery-3.2.0.min.js\"></script>\n"					
 				+ chartMetering + 
 				chartWeather +
 				billing+
 				ballance
 				+"<H2>Assigned panels</h2>"
 				+"<div id='transformer-elements' style=\"text-align: center;\"/>"
-				+ "<script src=\"http://canvasjs.com/assets/script/canvasjs.min.js\"></script>\n"
+				+ "<script src=\"/sg/assets/canvasjs.min.js\"></script>\n"
 				+ "<script src=\"/sg/assets/sg.js\"></script>\n"
 				+"<script  type=\"text/javascript\">\n"
 				+ "updateCounterListener(\"bill\",\"#bill\");    \n"
@@ -176,13 +176,13 @@ public class PageController {
 		page = "<!DOCTYPE html><html><head><link href=\"/sg/assets/sg.css\" />\n"
 				+ "<style></style><meta charset=\"utf-8\"><title>SG Charts</title></head><body>	\n"
 				+" <H1>Screen panel</H1>"
-				+ "<script src=\"https://code.jquery.com/jquery-3.2.0.min.js\"></script>\n"					
+				+ "<script src=\"/sg/assets/jquery-3.2.0.min.js\"></script>\n"					
 				+ chartMetering + 
 				chartWeather +
 				billing+
 				ballance					
 				+"<div id='transformer-elements' style=\"text-align: center;\"/>"
-				+ "<script src=\"http://canvasjs.com/assets/script/canvasjs.min.js\"></script>\n"
+				+ "<script src=\"/sg/assets/canvasjs.min.js\"></script>\n"
 				+ "<script src=\"/sg/assets/sg.js\"></script>\n"
 				+"<script  type=\"text/javascript\">\n"
 				+ "updateCounterListener(\"bill\",\"#bill\");    \n"
@@ -244,13 +244,13 @@ public class PageController {
 
 			page = "<!DOCTYPE html><html><head><link href=\"/sg/assets/sg.css\" />\n"
 					+ "<style></style><meta charset=\"utf-8\"><title>SG Charts</title></head><body>	\n"
-					+ "<script src=\"https://code.jquery.com/jquery-3.2.0.min.js\"></script>\n"					
+					+ "<script src=\"/sg/assets/jquery-3.2.0.min.js\"></script>\n"					
 					+ chartMetering + 
 					chartWeather + 
 					ballance
 					+"<H2>Assigned panels</h2>"
 					+"<div id='transformer-elements' style=\"text-align: center;\"/>"
-					+ "<script src=\"http://canvasjs.com/assets/script/canvasjs.min.js\"></script>\n"
+					+ "<script src=\"/sg/assets/canvasjs.min.js\"></script>\n"
 					+ "<script src=\"/sg/assets/sg.js\"></script>\n"
 					+"<script  type=\"text/javascript\">\n"
 					+ "updateCounterListener(\"bill\",\"#bill\");    \n"
@@ -297,10 +297,10 @@ public class PageController {
 					page="<!DOCTYPE html><html><head><link href=\"/sg/assets/sg.css\" />\n"
 							+ "<style></style><meta charset=\"utf-8\"><title>SG Charts</title></head><body>	\n"								
 							+"<H1>Solar Panel node :"+panel+" </H1>"							
-							+ "<script src=\"https://code.jquery.com/jquery-3.2.0.min.js\"></script>\n"+
+							+ "<script src=\"/sg/assets/jquery-3.2.0.min.js\"></script>\n"+
 							chartWeather
 							+"<div id='transformer-elements' style=\"text-align: center;\"/>"
-							+ "<script src=\"http://canvasjs.com/assets/script/canvasjs.min.js\"></script>\n"
+							+ "<script src=\"/sg/assets/canvasjs.min.js\"></script>\n"
 							+ "<script src=\"/sg/assets/sg.js\"></script>\n"
 							+"<script  type=\"text/javascript\">\n"
 							+ "updateListeners(\"wind\",charts.chart2,WIND);\n"
@@ -314,12 +314,12 @@ public class PageController {
 						page="<!DOCTYPE html><html><head><link href=\"/sg/assets/sg.css\" />\n"
 								+ "<style></style><meta charset=\"utf-8\"><title>SG Charts</title></head><body>	\n"							
 								+"<H1>SCADA central node</H1>"
-								+ "<script src=\"https://code.jquery.com/jquery-3.2.0.min.js\"></script>\n"					
+								+ "<script src=\"/sg/assets/jquery-3.2.0.min.js\"></script>\n"					
 								+ chartMetering + 
 								chartWeather + 
 								ballance+
 								billing
-								+ "<script src=\"http://canvasjs.com/assets/script/canvasjs.min.js\"></script>\n"
+								+ "<script src=\"/sg/assets/script/canvasjs.min.js\"></script>\n"
 								+ "<script src=\"/sg/assets/sg.js\"></script>\n"
 								+"<script  type=\"text/javascript\">\n"
 								+ "updateCounterListener(\"bill\",\"#bill\");    \n"
@@ -360,14 +360,14 @@ public class PageController {
 					ptrans = generateButtonCode("transformer-elements",found, this.gL.getElementByName(found).getMaxPower(), id);
 					page = "<!DOCTYPE html><html><head><link href=\"/sg/assets/sg.css\" />\n"
 							+ "<style></style><meta charset=\"utf-8\"><title>SG Charts</title></head><body>	\n"
-							+ "<script src=\"https://code.jquery.com/jquery-3.2.0.min.js\"></script>\n"
+							+ "<script src=\"/sg/assets/jquery-3.2.0.min.js\"></script>\n"
 
 							+ chartMetering + 
 							chartWeather + 
 							ballance
 							+"<H1>Assigned panels</h1>"
 							+"<div id='transformer-elements'/>"
-							+ "<script src=\"http://canvasjs.com/assets/script/canvasjs.min.js\"></script>\n"
+							+ "<script src=\"/sg/assets/canvasjs.min.js\"></script>\n"
 							+ "<script src=\"/sg/assets/sg.js\"></script>\n"
 							+"<script  type=\"text/javascript\">\n"
 							+ "updateCounterListener(\"bill\",\"#bill\");    \n"
